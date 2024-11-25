@@ -1,4 +1,3 @@
-# main.py
 from Responsable import Responsable
 from Proyecto import Proyecto
 from Organizacion import Organizacion
@@ -12,9 +11,9 @@ def mostrar_menu():
     print("3. Actualizar el estado de un proyecto")
     print("4. Eliminar un proyecto de la organización")
     print("5. Ordenar proyectos por impacto (emisiones reducidas)")
-    print("6. Calcular total de emisiones reducidas")
-    print("7. Determinar proyectos completados")
-    print("8. Mostrar información del responsable")
+    print("6. Determinar proyectos completados")
+    print("7. Mostrar información del responsable de un proyecto")
+    print("8. Actualizar emisiones de un proyecto")
     print("9. Salir")
 
 def crear_nuevo_proyecto(organizacion):
@@ -53,14 +52,34 @@ def actualizar_estado_proyecto(organizacion):
     organizacion.actualizar_estado_proyecto(proyecto_id, nuevo_estado)
 
 def mostrar_info_responsable(organizacion):
-    print("\n--- Información del Responsable ---")
-    print(f"Nombre del responsable: {organizacion.responsable.nombre} {organizacion.responsable.apellido}")
-    organizacion.responsable.mostrar_informacion()
+    proyecto_id = int(input("Introduce el ID del proyecto para mostrar el responsable: "))
+    proyecto = next((p for p in organizacion.proyectos if p.id == proyecto_id), None)
+    
+    if proyecto:
+        print("\n--- Información del Responsable ---")
+        print(f"Nombre del responsable: {proyecto.responsable.nombre} {proyecto.responsable.apellido}")
+        proyecto.responsable.mostrar_informacion()
+    else:
+        print(f"Proyecto con ID {proyecto_id} no encontrado.")
+
+def actualizar_emisiones_proyecto(organizacion):
+    proyecto_id = int(input("Introduce el ID del proyecto para actualizar emisiones: "))
+    proyecto = next((p for p in organizacion.proyectos if p.id == proyecto_id), None)
+    
+    if proyecto:
+        # Pedimos las emisiones finales
+        emisiones_finales = float(input(f"Introduce las emisiones finales de {proyecto.nombre} (toneladas): "))
+        # Calculamos la diferencia de impacto
+        diferencia_impacto = proyecto.emisiones_iniciales - emisiones_finales
+        print(f"\nDiferencia de impacto para el proyecto {proyecto.nombre}: {diferencia_impacto} toneladas reducidas.")
+        # Actualizamos las emisiones finales
+        proyecto.emisiones_finales = emisiones_finales
+    else:
+        print(f"Proyecto con ID {proyecto_id} no encontrado.")
 
 def ejecutar_menu():
-    # Crear responsable y organización
-    responsable1 = Responsable('12345678A', 'Andrea', 'Saa', 'andrea@gmail.com', '1234567890')
-    organizacion = Organizacion('Eco Energía', responsable1)
+    # Crear organización
+    organizacion = Organizacion('Eco Energía', None)
 
     while True:
         mostrar_menu()
@@ -78,11 +97,11 @@ def ejecutar_menu():
         elif opcion == '5':
             organizacion.ordenar_proyectos_por_emisiones()
         elif opcion == '6':
-            organizacion.calcular_total_emisiones()
-        elif opcion == '7':
             print(f"Proyectos completados: {organizacion.proyectos_completados()}")
+        elif opcion == '7':
+            mostrar_info_responsable(organizacion)  
         elif opcion == '8':
-            mostrar_info_responsable(organizacion)
+            actualizar_emisiones_proyecto(organizacion)
         elif opcion == '9':
             print("¡Gracias por usar nuestro Sistema de Gestión y Monitoreo!")
             break

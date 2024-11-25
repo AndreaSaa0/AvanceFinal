@@ -25,21 +25,11 @@ class Organizacion:
 
     def ordenar_proyectos_por_emisiones(self):
         """Ordena los proyectos por la cantidad de emisiones reducidas en orden descendente."""
-        self.proyectos.sort(key=lambda p: p.emisiones_reducidas, reverse=True)
+        self.proyectos.sort(key=lambda p: p.emisiones_iniciales, reverse=True)
         print("Proyectos ordenados por emisiones reducidas.")
-
-    def calcular_total_emisiones(self):
-        """Calcula la suma total de emisiones reducidas en todos los proyectos."""
-        total_emisiones = sum(p.emisiones_reducidas for p in self.proyectos)
-        print(f"Total de emisiones reducidas: {total_emisiones} toneladas.")
-
-    def mostrar_informacion(self):
-        """Muestra información general de la organización y sus proyectos."""
-        print(f"Organización: {self.nombre}")
-        print(f"Responsable: {self.responsable.nombre} {self.responsable.apellido}")
-        print("Proyectos:")
-        for p in self.proyectos:
-            p.mostrar_informacion()
+         # Mostrar cada proyecto con su información relevante (por ejemplo, nombre y emisiones)
+        for proyecto in self.proyectos:
+            print(f"Proyecto: {proyecto.nombre}, Emisiones Iniciales: {proyecto.emisiones_iniciales}")
 
     def actualizar_estado_proyecto(self, proyecto_id, nuevo_estado):
         """Actualiza el estado de un proyecto por su ID."""
